@@ -42,3 +42,17 @@ missed=subset(sub_test,pred_VORP>0.5 & VORP<0)
 
 #nba leaders in % of fta stemming from drives 
 high_fta=subset(p_final_g,fta_d>=0.227 & MIN>25,select=c("Player","fta_d"))
+
+#correlation matrix 
+corr_data=subset(p_nba,select=c(53,54,55,56,57,58))
+#replace nan with mean source: https://stackoverflow.com/questions/25835643/replace-missing-values-with-column-mean?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+for(i in 1:ncol(corr_data)){
+  corr_data[is.na(corr_data[,i]),i]<-mean(corr_data[,i],na.rm=TRUE)
+}
+res=cor(corr_data)
+round(res,2)
+#correlation plot 
+install.packages("corrplot")
+library(corrplot)
+corrplot(res,type="upper",order="hclust",
+         t1.col="black",tl.srt = 45)
